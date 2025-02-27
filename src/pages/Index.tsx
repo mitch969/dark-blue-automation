@@ -1,3 +1,4 @@
+
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -10,7 +11,7 @@ import {
   Monitor,
   MousePointerClick,
   ArrowRight,
-  Mixer,
+  Settings,
   Facebook,
   Linkedin,
   Twitter,
@@ -142,7 +143,7 @@ const Index = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-20">
             <div className="flex items-center space-x-2">
-              <Mixer className="w-8 h-8 text-primary" />
+              <Settings className="w-8 h-8 text-primary" />
               <span className="text-xl font-display font-semibold">Mivelaz Consulting</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -225,7 +226,7 @@ const Index = () => {
                       {service.icon}
                     </div>
                     <div className="w-8 h-8 text-primary/40">
-                      <Mixer />
+                      <Settings />
                     </div>
                   </div>
                   <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
@@ -361,7 +362,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
             <div>
               <div className="flex items-center space-x-2 mb-6">
-                <Mixer className="w-8 h-8 text-primary" />
+                <Settings className="w-8 h-8 text-primary" />
                 <span className="text-xl font-display font-semibold">Mivelaz Consulting</span>
               </div>
               <p className="text-muted-foreground">
