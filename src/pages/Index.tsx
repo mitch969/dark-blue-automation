@@ -1,5 +1,4 @@
-
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -10,8 +9,11 @@ import {
   MessageSquare,
   Monitor,
   MousePointerClick,
+  ArrowRight,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useEffect, useRef, useState } from "react";
+import * as THREE from "three";
 
 const services = [
   {
@@ -75,42 +77,114 @@ const testimonials = [
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    // Three.js Scene Setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    containerRef.current?.appendChild(renderer.domElement);
+
+    // Create torus geometry
+    const torusGeometry = new THREE.TorusKnotGeometry(2, 0.6, 100, 16);
+    const torusMaterial = new THREE.MeshPhongMaterial({ 
+      color: 0x3b82f6,
+      wireframe: true,
+    });
+    const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+
+    // Add lighting
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(1, 1, 1);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0x404040));
+
+    scene.add(torus);
+    camera.position.z = 5;
+
+    // Animation loop
+    const animate = () => {
+      requestAnimationFrame(animate);
+      torus.rotation.x += 0.002;
+      torus.rotation.y += 0.002;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    // Handle window resize
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      containerRef.current?.removeChild(renderer.domElement);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <div ref={containerRef} className="absolute inset-0 z-0" />
+        <div className="absolute inset-0 bg-grid z-[1]" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="container mx-auto px-4 text-center"
+          className="container mx-auto px-4 text-center relative z-10"
         >
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
+          <motion.h1 
+            className="text-5xl md:text-7xl font-bold mb-6 text-gradient leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
             Transformez votre entreprise grâce à l'IA
-          </h1>
-          <p className="text-lg md:text-xl mb-8 text-muted-foreground max-w-2xl mx-auto">
+          </motion.h1>
+          <motion.p 
+            className="text-xl md:text-2xl mb-8 text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+          >
             Libérez jusqu'à 80% de votre temps en automatisant vos processus
             métiers et en intégrant des solutions d'intelligence artificielle
-            adaptées à vos besoins spécifiques.
-          </p>
-          <Button
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            adaptées à vos besoins.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
           >
-            Démarrer votre transformation
-          </Button>
+            <Button
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 rounded-xl"
+            >
+              Démarrer votre transformation
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
+          </motion.div>
         </motion.div>
       </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-secondary/20">
+      <section className="py-32 bg-secondary/10">
         <div className="container mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-center mb-12"
+            className="text-4xl md:text-5xl font-bold text-center mb-16"
           >
             Nos services
           </motion.h2>
@@ -123,10 +197,16 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="glass p-6 hover:bg-white/20 transition-all duration-300">
-                  <div className="mb-4 text-primary">{service.icon}</div>
-                  <h3 className="text-xl font-semibold mb-3">{service.title}</h3>
-                  <p className="text-muted-foreground">{service.description}</p>
+                <Card className="glass glass-hover p-8 h-full">
+                  <div className="mb-6">
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                      {service.icon}
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
+                  <p className="text-muted-foreground text-lg leading-relaxed">
+                    {service.description}
+                  </p>
                 </Card>
               </motion.div>
             ))}
@@ -135,7 +215,7 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-20">
+      <section className="py-32">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <motion.div
@@ -144,10 +224,10 @@ const Index = () => {
               viewport={{ once: true }}
               className="text-center"
             >
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">
+              <h2 className="text-4xl md:text-5xl font-bold mb-12">
                 À propos de Michel Mivelaz
               </h2>
-              <div className="space-y-6 text-muted-foreground">
+              <div className="space-y-8 text-muted-foreground text-lg leading-relaxed">
                 <p>
                   Depuis 2019, j'accompagne les PME et indépendants romands dans
                   leur transformation numérique avec un focus sur l'intelligence
@@ -171,13 +251,13 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-secondary/20">
+      <section className="py-32 bg-secondary/10">
         <div className="container mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-3xl md:text-4xl font-bold text-center mb-12"
+            className="text-4xl md:text-5xl font-bold text-center mb-16"
           >
             Ce que disent nos clients
           </motion.h2>
@@ -190,16 +270,16 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="glass p-6 h-full flex flex-col justify-between">
+                <Card className="glass glass-hover p-8 h-full flex flex-col justify-between">
                   <div>
-                    <MessageSquare className="w-6 h-6 text-primary mb-4" />
-                    <p className="mb-4 text-muted-foreground">
+                    <MessageSquare className="w-8 h-8 text-primary mb-6" />
+                    <p className="mb-6 text-lg leading-relaxed text-muted-foreground">
                       "{testimonial.quote}"
                     </p>
                   </div>
                   <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="font-semibold text-lg">{testimonial.author}</p>
+                    <p className="text-muted-foreground">
                       {testimonial.role}
                     </p>
                   </div>
@@ -211,7 +291,7 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-20">
+      <section className="py-32">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -219,29 +299,29 @@ const Index = () => {
             viewport={{ once: true }}
             className="text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold mb-8">
               Contactez-nous
             </h2>
-            <p className="text-muted-foreground mb-8">
+            <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
               Prêt à transformer votre entreprise? Discutons de vos besoins
-              spécifiques.
+              spécifiques et construisons ensemble votre solution sur mesure.
             </p>
             <div className="max-w-md mx-auto">
-              <Card className="glass p-6">
-                <div className="space-y-4">
+              <Card className="glass glass-hover p-8">
+                <div className="space-y-6">
                   <div>
-                    <p className="text-sm font-medium">Email</p>
-                    <p className="text-muted-foreground">
+                    <p className="text-lg font-medium mb-2">Email</p>
+                    <p className="text-muted-foreground text-lg">
                       contact@mivelaz-consulting.ch
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Téléphone</p>
-                    <p className="text-muted-foreground">+41 XX XXX XX XX</p>
+                    <p className="text-lg font-medium mb-2">Téléphone</p>
+                    <p className="text-muted-foreground text-lg">+41 XX XXX XX XX</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium">Adresse</p>
-                    <p className="text-muted-foreground">Suisse Romande</p>
+                    <p className="text-lg font-medium mb-2">Adresse</p>
+                    <p className="text-muted-foreground text-lg">Suisse Romande</p>
                   </div>
                 </div>
               </Card>
@@ -253,7 +333,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="py-8 border-t border-white/10">
         <div className="container mx-auto px-4">
-          <p className="text-center text-sm text-muted-foreground">
+          <p className="text-center text-muted-foreground">
             © 2024 Mivelaz Consulting. Tous droits réservés
           </p>
         </div>
