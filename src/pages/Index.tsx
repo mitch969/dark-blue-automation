@@ -1,4 +1,3 @@
-
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -220,13 +219,10 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="glass glass-hover p-8 h-full">
-                  <div className="mb-6 flex items-center space-x-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                <Card className="glass glass-hover p-8 h-full text-center">
+                  <div className="mb-6 flex justify-center">
+                    <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                       {service.icon}
-                    </div>
-                    <div className="w-8 h-8 text-primary/40">
-                      <Settings />
                     </div>
                   </div>
                   <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
@@ -335,20 +331,14 @@ const Index = () => {
             <div className="max-w-md mx-auto">
               <Card className="glass glass-hover p-8">
                 <div className="space-y-6">
-                  <div>
-                    <p className="text-lg font-medium mb-2">Email</p>
-                    <p className="text-muted-foreground text-lg">
-                      contact@mivelaz-consulting.ch
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-lg font-medium mb-2">Téléphone</p>
-                    <p className="text-muted-foreground text-lg">+41 XX XXX XX XX</p>
-                  </div>
-                  <div>
-                    <p className="text-lg font-medium mb-2">Adresse</p>
-                    <p className="text-muted-foreground text-lg">Suisse Romande</p>
-                  </div>
+                  <Button
+                    variant="default"
+                    className="w-full py-6 text-lg"
+                    size="lg"
+                  >
+                    Prendre rendez-vous
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
                 </div>
               </Card>
             </div>
