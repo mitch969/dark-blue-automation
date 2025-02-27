@@ -10,9 +10,13 @@ import {
   Monitor,
   MousePointerClick,
   ArrowRight,
+  Mixer,
+  Facebook,
+  Linkedin,
+  Twitter,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import * as THREE from "three";
 
 const services = [
@@ -133,8 +137,26 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* Navigation */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-white/10">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-20">
+            <div className="flex items-center space-x-2">
+              <Mixer className="w-8 h-8 text-primary" />
+              <span className="text-xl font-display font-semibold">Mivelaz Consulting</span>
+            </div>
+            <div className="hidden md:flex items-center space-x-8">
+              <a href="#services" className="text-muted-foreground hover:text-foreground transition-colors">Services</a>
+              <a href="#about" className="text-muted-foreground hover:text-foreground transition-colors">À propos</a>
+              <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">Témoignages</a>
+              <Button variant="default" size="sm">Contact</Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
         <div ref={containerRef} className="absolute inset-0 z-0" />
         <div className="absolute inset-0 bg-grid z-[1]" />
         <motion.div
@@ -144,7 +166,7 @@ const Index = () => {
           className="container mx-auto px-4 text-center relative z-10"
         >
           <motion.h1 
-            className="text-5xl md:text-7xl font-bold mb-6 text-gradient leading-tight"
+            className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -178,7 +200,7 @@ const Index = () => {
       </section>
 
       {/* Services Section */}
-      <section className="py-32 bg-secondary/10">
+      <section id="services" className="py-32 bg-secondary/10">
         <div className="container mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -198,9 +220,12 @@ const Index = () => {
                 transition={{ delay: index * 0.1 }}
               >
                 <Card className="glass glass-hover p-8 h-full">
-                  <div className="mb-6">
+                  <div className="mb-6 flex items-center space-x-4">
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
                       {service.icon}
+                    </div>
+                    <div className="w-8 h-8 text-primary/40">
+                      <Mixer />
                     </div>
                   </div>
                   <h3 className="text-2xl font-semibold mb-4">{service.title}</h3>
@@ -330,12 +355,62 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 border-t border-white/10">
+      {/* Extended Footer */}
+      <footer className="bg-secondary/20 pt-20 pb-8">
         <div className="container mx-auto px-4">
-          <p className="text-center text-muted-foreground">
-            © 2024 Mivelaz Consulting. Tous droits réservés
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            <div>
+              <div className="flex items-center space-x-2 mb-6">
+                <Mixer className="w-8 h-8 text-primary" />
+                <span className="text-xl font-display font-semibold">Mivelaz Consulting</span>
+              </div>
+              <p className="text-muted-foreground">
+                Transformation digitale et intégration d'IA pour PME et indépendants romands.
+              </p>
+            </div>
+            <div>
+              <h4 className="font-display text-lg font-semibold mb-4">Services</h4>
+              <ul className="space-y-3">
+                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Automatisation des processus</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Intégration de l'IA</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Sites web professionnels</a></li>
+                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Formation aux outils numériques</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-display text-lg font-semibold mb-4">Contact</h4>
+              <ul className="space-y-3">
+                <li className="text-muted-foreground">contact@mivelaz-consulting.ch</li>
+                <li className="text-muted-foreground">+41 XX XXX XX XX</li>
+                <li className="text-muted-foreground">Suisse Romande</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-display text-lg font-semibold mb-4">Suivez-nous</h4>
+              <div className="flex space-x-4">
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Linkedin className="w-6 h-6" />
+                </a>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Twitter className="w-6 h-6" />
+                </a>
+                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                  <Facebook className="w-6 h-6" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="pt-8 border-t border-white/10">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <p className="text-sm text-muted-foreground">
+                © 2024 Mivelaz Consulting. Tous droits réservés
+              </p>
+              <div className="flex space-x-6">
+                <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Politique de confidentialité</a>
+                <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Mentions légales</a>
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
