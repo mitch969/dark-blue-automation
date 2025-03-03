@@ -1,3 +1,5 @@
+
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -17,7 +19,6 @@ import {
   Menu,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 
 const services = [
