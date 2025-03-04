@@ -13,13 +13,13 @@ import {
   MousePointerClick,
   ArrowRight,
   Settings,
-  Facebook,
   Linkedin,
-  Twitter,
   Menu,
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import * as THREE from "three";
+import { Link } from "react-router-dom";
+import CookieBanner from "@/components/CookieBanner";
 
 const services = [
   {
@@ -27,36 +27,42 @@ const services = [
     title: "Automatisation des processus",
     description:
       "Éliminez jusqu'à 80% des tâches manuelles et répétitives pour vous concentrer sur votre cœur de métier.",
+    link: "/services/automatisation"
   },
   {
     icon: <Brain className="w-6 h-6" />,
     title: "Intégration de l'IA",
     description:
       "Intégrez des solutions d'intelligence artificielle adaptées à vos besoins spécifiques et votre workflow quotidien.",
+    link: "/services/integration-ai"
   },
   {
     icon: <Globe className="w-6 h-6" />,
     title: "Sites web professionnels",
     description:
       "Développez une présence en ligne performante, génératrice de leads et conforme à la législation nLPD.",
+    link: "/services/sites-web"
   },
   {
     icon: <MousePointerClick className="w-6 h-6" />,
     title: "Optimisation Google My Business",
     description:
       "Maximisez votre visibilité locale grâce à l'optimisation de vos fiches d'entreprise.",
+    link: "/"
   },
   {
     icon: <MapPin className="w-6 h-6" />,
     title: "Référencement local",
     description:
       "Améliorez votre positionnement dans les recherches locales et attirez plus de clients dans votre zone géographique.",
+    link: "/"
   },
   {
     icon: <Monitor className="w-6 h-6" />,
     title: "Formation aux outils numériques",
     description:
       "Maîtrisez les outils digitaux qui vous permettront d'accroître votre productivité au quotidien.",
+    link: "/"
   },
 ];
 
@@ -81,13 +87,34 @@ const testimonials = [
   },
 ];
 
+// Rotating headline texts for hero section
+const rotatingTexts = ["grâce à l'IA", "grâce à l'automatisation", "grâce à un site web professionnel", "grâce au référencement local"];
+
 const Index = () => {
   const isMobile = useIsMobile();
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const [headlineIndex, setHeadlineIndex] = useState(0);
+  const [isRotatingTextVisible, setIsRotatingTextVisible] = useState(true);
 
+  // Rotate headline text effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsRotatingTextVisible(false);
+      
+      setTimeout(() => {
+        setHeadlineIndex((prevIndex) => (prevIndex + 1) % rotatingTexts.length);
+        setIsRotatingTextVisible(true);
+      }, 500); // Wait for fade out before changing text
+      
+    }, 3000); // Change text every 3 seconds
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Three.js animation
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -162,7 +189,10 @@ const Index = () => {
               <a href="#services" className="text-white hover:text-primary transition-colors">Services</a>
               <a href="#about" className="text-white hover:text-primary transition-colors">À propos</a>
               <a href="#testimonials" className="text-white hover:text-primary transition-colors">Témoignages</a>
-              <Button variant="default" size="sm">Contact</Button>
+              <Link to="/services/automatisation" className="text-white hover:text-primary transition-colors">Automatisation</Link>
+              <Link to="/services/integration-ai" className="text-white hover:text-primary transition-colors">IA</Link>
+              <Link to="/services/sites-web" className="text-white hover:text-primary transition-colors">Sites Web</Link>
+              <Button variant="default" size="sm" className="button-text">Contact</Button>
             </div>
           </div>
           {/* Mobile Menu */}
@@ -177,7 +207,10 @@ const Index = () => {
                 <a href="#services" className="text-white hover:text-primary transition-colors">Services</a>
                 <a href="#about" className="text-white hover:text-primary transition-colors">À propos</a>
                 <a href="#testimonials" className="text-white hover:text-primary transition-colors">Témoignages</a>
-                <Button variant="default" size="sm" className="w-full">Contact</Button>
+                <Link to="/services/automatisation" className="text-white hover:text-primary transition-colors">Automatisation</Link>
+                <Link to="/services/integration-ai" className="text-white hover:text-primary transition-colors">Intelligence Artificielle</Link>
+                <Link to="/services/sites-web" className="text-white hover:text-primary transition-colors">Sites Web</Link>
+                <Button variant="default" size="sm" className="w-full button-text">Contact</Button>
               </div>
             </motion.div>
           )}
@@ -195,15 +228,29 @@ const Index = () => {
           className="container mx-auto px-4 text-center relative z-10"
         >
           <motion.h1 
-            className="text-5xl md:text-7xl font-bold mb-6 text-white leading-tight"
+            className="text-5xl md:text-7xl font-bold mb-3 text-white leading-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            Transformez votre entreprise grâce à l'IA
+            Transformez votre entreprise
           </motion.h1>
+          <motion.div 
+            className="text-5xl md:text-7xl font-bold mb-6 text-primary leading-tight h-24"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <motion.span
+              initial={{ opacity: 1 }}
+              animate={{ opacity: isRotatingTextVisible ? 1 : 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {rotatingTexts[headlineIndex]}
+            </motion.span>
+          </motion.div>
           <motion.p 
-            className="text-xl md:text-2xl mb-8 text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            className="text-xl md:text-2xl mb-8 paragraph-text max-w-2xl mx-auto leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
@@ -219,7 +266,7 @@ const Index = () => {
           >
             <Button
               size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 rounded-xl"
+              className="bg-primary hover:bg-primary/90 button-text text-lg px-8 py-6 rounded-xl"
             >
               Démarrer votre transformation
               <ArrowRight className="ml-2 w-5 h-5" />
@@ -248,19 +295,21 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="glass glass-hover p-8 h-full text-center">
-                  <div className="mb-6 flex justify-center">
-                    <div className="w-24 h-24 rounded-xl bg-primary/10 flex items-center justify-center">
-                      {React.cloneElement(service.icon as React.ReactElement, { 
-                        className: "w-12 h-12 text-white"
-                      })}
+                <Link to={service.link}>
+                  <Card className="glass glass-hover p-8 h-full text-center">
+                    <div className="mb-6 flex justify-center">
+                      <div className="w-24 h-24 rounded-xl bg-primary/10 flex items-center justify-center">
+                        {React.cloneElement(service.icon as React.ReactElement, { 
+                          className: "w-12 h-12 text-white"
+                        })}
+                      </div>
                     </div>
-                  </div>
-                  <h3 className="text-2xl font-semibold mb-4 text-white">{service.title}</h3>
-                  <p className="text-white/70 text-lg leading-relaxed">
-                    {service.description}
-                  </p>
-                </Card>
+                    <h3 className="text-2xl font-semibold mb-4 text-white">{service.title}</h3>
+                    <p className="paragraph-text text-lg leading-relaxed">
+                      {service.description}
+                    </p>
+                  </Card>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -268,7 +317,7 @@ const Index = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-32">
+      <section id="about" className="py-32">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <motion.div
@@ -280,22 +329,16 @@ const Index = () => {
               <h2 className="text-4xl md:text-5xl font-bold mb-12">
                 À propos de Michel Mivelaz
               </h2>
-              <div className="space-y-8 text-muted-foreground text-lg leading-relaxed">
+              <div className="space-y-8 paragraph-text text-lg leading-relaxed">
                 <p>
-                  Depuis 2019, j'accompagne les PME et indépendants romands dans
+                  Depuis 2019, nous accompagnons les PME et indépendants romands dans
                   leur transformation numérique avec un focus sur l'intelligence
                   artificielle et l'automatisation des processus.
                 </p>
                 <p>
-                  Ma mission est de libérer le potentiel des entreprises en
+                  Notre mission est de libérer le potentiel des entreprises en
                   éliminant les tâches manuelles et en intégrant des solutions
                   d'IA adaptées à leurs besoins spécifiques.
-                </p>
-                <p>
-                  Avant de fonder Mivelaz Consulting, j'ai acquis plus de 20 ans
-                  d'expérience dans le secteur bancaire en tant que gestionnaire
-                  de fortune pour des clients d'Europe et du Moyen-Orient, et suis
-                  titulaire d'un diplôme fédéral d'Analyste Financier.
                 </p>
               </div>
             </motion.div>
@@ -304,7 +347,7 @@ const Index = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-32 bg-secondary/10">
+      <section id="testimonials" className="py-32 bg-secondary/10">
         <div className="container mx-auto px-4">
           <motion.h2
             initial={{ opacity: 0 }}
@@ -314,7 +357,8 @@ const Index = () => {
           >
             Ce que disent nos clients
           </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {testimonials.map((testimonial, index) => (
               <motion.div
                 key={index}
@@ -322,22 +366,24 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
+                className="relative"
               >
-                <Card className="glass glass-hover p-8 h-full relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-primary/50 via-primary to-primary/50" />
-                  <div className="relative z-10">
-                    <MessageSquare className="w-8 h-8 text-primary mb-6" />
-                    <p className="mb-6 text-lg leading-relaxed text-white italic">
-                      "{testimonial.quote}"
+                <div className="absolute inset-0 bg-gradient-to-b from-primary/10 to-transparent rounded-2xl transform -rotate-1 scale-[1.03] z-0"></div>
+                <Card className="relative z-10 p-8 h-full glass border-none shadow-xl flex flex-col">
+                  <MessageSquare className="w-10 h-10 text-primary mb-6 opacity-80" />
+                  <p className="mb-8 text-lg leading-relaxed paragraph-text italic">
+                    "{testimonial.quote}"
+                  </p>
+                  <div className="mt-auto pt-6 border-t border-white/10">
+                    <p className="font-semibold text-lg text-white">{testimonial.author}</p>
+                    <p className="paragraph-text">
+                      {testimonial.role}
                     </p>
-                    <div className="border-t border-white/10 pt-6 mt-auto">
-                      <p className="font-semibold text-lg text-white">{testimonial.author}</p>
-                      <p className="text-white/70">
-                        {testimonial.role}
-                      </p>
-                    </div>
                   </div>
-                  <div className="absolute bottom-0 right-0 w-24 h-24 bg-primary/5 rounded-tl-full -mr-12 -mb-12" />
+                  
+                  {/* Decorative elements */}
+                  <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-primary/5 blur-md"></div>
+                  <div className="absolute bottom-10 left-4 w-6 h-6 rounded-full bg-primary/10 blur-sm"></div>
                 </Card>
               </motion.div>
             ))}
@@ -346,7 +392,7 @@ const Index = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-32">
+      <section id="contact" className="py-32">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -357,7 +403,7 @@ const Index = () => {
             <h2 className="text-4xl md:text-5xl font-bold mb-8">
               Contactez-nous
             </h2>
-            <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+            <p className="text-xl paragraph-text mb-12 max-w-2xl mx-auto">
               Prêt à transformer votre entreprise? Discutons de vos besoins
               spécifiques et construisons ensemble votre solution sur mesure.
             </p>
@@ -366,7 +412,7 @@ const Index = () => {
                 <div className="space-y-6">
                   <Button
                     variant="default"
-                    className="w-full py-6 text-lg"
+                    className="w-full py-6 text-lg button-text"
                     size="lg"
                   >
                     Prendre rendez-vous
@@ -388,55 +434,52 @@ const Index = () => {
                 <Settings className="w-8 h-8 text-primary" />
                 <span className="text-xl font-display font-semibold text-white">Mivelaz Consulting</span>
               </div>
-              <p className="text-muted-foreground">
+              <p className="paragraph-text">
                 Transformation digitale et intégration d'IA pour PME et indépendants romands.
               </p>
             </div>
             <div>
               <h4 className="font-display text-lg font-semibold mb-4">Services</h4>
               <ul className="space-y-3">
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Automatisation des processus</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Intégration de l'IA</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Sites web professionnels</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Formation aux outils numériques</a></li>
+                <li><Link to="/services/automatisation" className="paragraph-text hover:text-foreground transition-colors">Automatisation des processus</Link></li>
+                <li><Link to="/services/integration-ai" className="paragraph-text hover:text-foreground transition-colors">Intégration de l'IA</Link></li>
+                <li><Link to="/services/sites-web" className="paragraph-text hover:text-foreground transition-colors">Sites web professionnels</Link></li>
+                <li><a href="#services" className="paragraph-text hover:text-foreground transition-colors">Formation aux outils numériques</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-display text-lg font-semibold mb-4">Contact</h4>
               <ul className="space-y-3">
-                <li className="text-muted-foreground">contact@mivelaz-consulting.ch</li>
-                <li className="text-muted-foreground">+41 XX XXX XX XX</li>
-                <li className="text-muted-foreground">Suisse Romande</li>
+                <li className="paragraph-text">hello@mivelaz-consulting.ch</li>
+                <li className="paragraph-text">+41 76 822 47 90</li>
+                <li className="paragraph-text">Suisse Romande</li>
               </ul>
             </div>
             <div>
               <h4 className="font-display text-lg font-semibold mb-4">Suivez-nous</h4>
               <div className="flex space-x-4">
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="https://www.linkedin.com/in/m-mivelaz/" target="_blank" rel="noopener noreferrer" className="paragraph-text hover:text-primary transition-colors">
                   <Linkedin className="w-6 h-6" />
-                </a>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Twitter className="w-6 h-6" />
-                </a>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  <Facebook className="w-6 h-6" />
                 </a>
               </div>
             </div>
           </div>
           <div className="pt-8 border-t border-white/10">
             <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-              <p className="text-sm text-muted-foreground">
-                © 2024 Mivelaz Consulting. Tous droits réservés
+              <p className="text-sm paragraph-text">
+                © 2025 Mivelaz Consulting. Tous droits réservés
               </p>
               <div className="flex space-x-6">
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Politique de confidentialité</a>
-                <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">Mentions légales</a>
+                <a href="#" className="text-sm paragraph-text hover:text-foreground transition-colors">Politique de confidentialité</a>
+                <a href="#" className="text-sm paragraph-text hover:text-foreground transition-colors">Politique des cookies</a>
               </div>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Cookie consent banner */}
+      <CookieBanner />
     </div>
   );
 };
