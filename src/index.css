@@ -13,7 +13,7 @@
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
+    --primary: 199 71% 53%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -25,7 +25,7 @@
     --destructive-foreground: 210 40% 98%;
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --ring: 199 71% 53%;
   }
 }
 
@@ -37,7 +37,7 @@
     @apply bg-background text-foreground antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight;
+    @apply font-display tracking-tight font-bold;
   }
 }
 
@@ -65,7 +65,7 @@
 }
 
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#2DA1DF] via-[#2DA1DF] to-[#2DA1DF];
 }
 
 .bg-grid {
@@ -80,5 +80,5 @@
 }
 
 .button-text {
-  @apply text-[#B8BABE];
+  @apply text-white font-bold;
 }

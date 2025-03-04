@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Settings, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ServiceNavbar = () => {
@@ -13,8 +13,11 @@ const ServiceNavbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <Link to="/" className="flex items-center space-x-2">
-            <Settings className="w-8 h-8 text-primary" />
-            <span className="text-xl font-display font-semibold text-white">Mivelaz Consulting</span>
+            <img 
+              src="/lovable-uploads/1d79b896-c763-4c13-bd5c-6d35abaee74f.png" 
+              alt="Mivelaz Consulting Logo" 
+              className="h-10" 
+            />
           </Link>
           <div className="md:hidden">
             <Button

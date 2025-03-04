@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { Settings, Linkedin } from "lucide-react";
+import { Linkedin } from "lucide-react";
 
 const ServiceFooter = () => {
   return (
@@ -9,9 +9,12 @@ const ServiceFooter = () => {
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <Settings className="w-8 h-8 text-primary" />
-              <span className="text-xl font-display font-semibold text-white">Mivelaz Consulting</span>
+            <div className="flex items-center mb-6">
+              <img 
+                src="/lovable-uploads/1d79b896-c763-4c13-bd5c-6d35abaee74f.png" 
+                alt="Mivelaz Consulting Logo" 
+                className="h-10" 
+              />
             </div>
             <p className="paragraph-text">
               Transformation digitale et intégration d'IA pour PME et indépendants romands.
